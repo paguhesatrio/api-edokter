@@ -4,5 +4,5 @@
 
 ## Database 
 Membuat database baru di SIK dengan nama tabel users
-dan mengubah nik dengan penyortiran latin1_swedish_ci dan merelasikan users dengan pegawai 
+dan mengubah nik dengan penyortiran latin1_swedish_ci dan merelasikan nik pada users dengan pegawai 
 
