@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PasienController;
+use App\Http\Controllers\ObatController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -17,9 +18,9 @@ use App\Http\Controllers\PasienController;
 Route::post('register', [LoginController::class, 'register']);
 Route::post('login', [LoginController::class, 'login']);
 Route::get('tampilPasien', [PasienController::class, 'tampilPasien'])->middleware(['auth:sanctum']);
-Route::get('tampilObat', [PasienController::class, 'tampilObat']);
-Route::get('tampilAturanPakai', [PasienController::class, 'tampilAturanPakai']);
-Route::post('tambahObat', [PasienController::class, 'tambahObat'])->middleware(['auth:sanctum']);;
+Route::get('tampilObat', [ObatController::class, 'tampilObat']);
+Route::get('tampilAturanPakai', [ObatController::class, 'tampilAturanPakai']);
+Route::post('tambahObat', [ObatController::class, 'tambahObat'])->middleware(['auth:sanctum']);;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
