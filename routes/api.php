@@ -20,7 +20,8 @@ Route::post('login', [LoginController::class, 'login']);
 Route::get('tampilPasien', [PasienController::class, 'tampilPasien'])->middleware(['auth:sanctum']);
 Route::get('tampilObat', [ObatController::class, 'tampilObat']);
 Route::get('tampilAturanPakai', [ObatController::class, 'tampilAturanPakai']);
-Route::post('tambahObat', [ObatController::class, 'tambahObat'])->middleware(['auth:sanctum']);;
+Route::post('tambahObat', [ObatController::class, 'tambahObat'])->middleware(['auth:sanctum']);
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
