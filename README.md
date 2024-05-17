@@ -16,7 +16,7 @@ dan mengubah nik dengan penyortiran latin1_swedish_ci dan merelasikan nik pada u
     "aturan_pakai": ["3x1", "3x2", "3x3"],
     "jmlh_obat": 3
 }
-
+ ```
 
 - tambahObatRacikan
 ```json
@@ -49,3 +49,4 @@ dan mengubah nik dengan penyortiran latin1_swedish_ci dan merelasikan nik pada u
         ["3", "4"]
     ]
 }
+ ```
