@@ -107,14 +107,20 @@ class ObatController extends Controller
     { 
         $request->validate([
             'no_rawat' => 'required',
-            'jmlh_racikan' => 'required',
-            'jmlh_obat' => 'required',
-            // 'kode_brng' => 'required|array',
-            // 'jml' => 'required|array',
-            // 'aturan_pakai' => 'required|array',
+            'jmlh_obat_racikan' => 'required|array',
+            'nama_racik' => 'required|array',
+            'kd_racik' => 'required|array',
+            'jml_dr' => 'required|array',
+            'aturan_pakai' => 'required|array',
+            'keterangan' => 'required|array',
+            'kode_brng' => 'required|array',
+            'p1' => 'required|array',
+            'p2' => 'required|array',
+            'kandungan' => 'required|array',
+            'jml' => 'required|array',
         ]);
     
-        // Mendapatkan tanggal saat iniw
+        // Mendapatkan tanggal saat ini
         $tanggalSekarang = date('Ymd');
         $jamSekarang = date('H:i:s');
     
@@ -127,7 +133,7 @@ class ObatController extends Controller
     
         // Mengambil kode dokter dari token
         $kdDokter = Auth::user()->nik;
-
+    
         $resep_obat = [
             'no_resep' => $noResep,
             'tgl_perawatan' => null,
@@ -135,47 +141,58 @@ class ObatController extends Controller
             'no_rawat' => $request->input('no_rawat'),
             'kd_dokter' => $kdDokter,
             'tgl_peresepan' => $tanggalSekarang,
-            'jam_peresepan' => $jamSekarang ,
+            'jam_peresepan' => $jamSekarang,
             'status' => 'ralan',
             'tgl_penyerahan' => $tanggalSekarang,  
             'jam_penyerahan' =>  "00:00:00",    
         ];
         DB::table('resep_obat')->insert($resep_obat);
-
-       // Memasukkan resep dokter sebanyak jmlh_obat
-       $resep_dokter_racikan = [];
-       for ($i = 0; $i < $request->input('jmlh_racikan'); $i++) {
-           $resep_dokter_racikan[] = [
-               'no_resep' => $noResep,
-               'no_racik' => $request->input('no_racik')[$i],
-               'nama_racik'=> $request->input('nama_racik')[$i],
-               'kd_racik'=> $request->input('kd_racik')[$i],
-               'jml_dr'=> $request->input('jml_dr')[$i],
-               'aturan_pakai'=> $request->input('aturan_pakai')[$i],
-               'keterangan'=> $request->input('keterangan')[$i],
-           ];
-       }
-       DB::table('resep_dokter_racikan')->insert($resep_dokter_racikan);
-
-        // Memasukkan resep dokter sebanyak jmlh_obat
-        $resep_dokter_data = [];
-        for ($i = 0; $i < $request->input('jmlh_obat'); $i++) {
-            $resep_dokter_data[] = [
+    
+        // Memasukkan resep dokter racikan sebanyak jmlh_obat_racikan
+        $resep_dokter_racikan = [];
+        $resep_dokter_racikan_detail = [];
+        $jmlh_obat_racikan = $request->input('jmlh_obat_racikan');
+    
+        foreach ($jmlh_obat_racikan as $index => $jml) {
+            // Menghasilkan no_racik secara otomatis
+            $no_racik = $index + 1;
+    
+            // Tambahkan data ke tabel resep_dokter_racikan
+            $resep_dokter_racikan[] = [
                 'no_resep' => $noResep,
-                'kode_brng' => $request->input('kode_brng')[$i],
-                'jml'=> $request->input('jml')[$i],
-                'aturan_pakai'=> $request->input('aturan_pakai')[$i],
+                'no_racik' => $no_racik,
+                'nama_racik' => $request->input('nama_racik')[$index],
+                'kd_racik' => $request->input('kd_racik')[$index],
+                'jml_dr' => $request->input('jml_dr')[$index],
+                'aturan_pakai' => $request->input('aturan_pakai')[$index],
+                'keterangan' => $request->input('keterangan')[$index],
             ];
+    
+            // Tambahkan detail racikan sebanyak jumlah yang sesuai
+            for ($i = 0; $i < $jml; $i++) {
+                $resep_dokter_racikan_detail[] = [
+                    'no_resep' => $noResep,
+                    'no_racik' => $no_racik,
+                    'kode_brng' => $request->input('kode_brng')[$index][$i],
+                    'p1' => $request->input('p1')[$index][$i],
+                    'p2' => $request->input('p2')[$index][$i],
+                    'kandungan' => $request->input('kandungan')[$index][$i],
+                    'jml' => $request->input('jml')[$index][$i],
+                ];
+            }
         }
-        // Simpan resep dokter
-        DB::table('resep_dokter')->insert($resep_dokter_data);
+    
+        DB::table('resep_dokter_racikan')->insert($resep_dokter_racikan);
+        DB::table('resep_dokter_racikan_detail')->insert($resep_dokter_racikan_detail);
     
         return response()->json([
             'success' => true,
             'message' => 'Data aturan pakai berhasil dimuat',
-            'data1' => $resep_obat,
-            'data' => $resep_dokter_data,
+            'data2' => $resep_obat,
+            'data1' => $resep_dokter_racikan,
+            'data' => $resep_dokter_racikan_detail,
         ]); 
     }
+    
     
 }

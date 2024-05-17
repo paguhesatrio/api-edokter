@@ -21,7 +21,7 @@ Route::get('tampilPasien', [PasienController::class, 'tampilPasien'])->middlewar
 Route::get('tampilObat', [ObatController::class, 'tampilObat']);
 Route::get('tampilAturanPakai', [ObatController::class, 'tampilAturanPakai']);
 Route::post('tambahObat', [ObatController::class, 'tambahObat'])->middleware(['auth:sanctum']);
-
+Route::post('tambahObatRacikan', [ObatController::class, 'tambahObatRacikan'])->middleware(['auth:sanctum']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
