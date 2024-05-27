@@ -13,7 +13,7 @@ class ObatController extends Controller
         $hasViewedPasien = true; 
 
         if ($hasViewedPasien) {
-            $obat = DB::table('resep_dokter')->get();
+            $obat = DB::table('gudangbarang')->get();
            
             return response()->json([
                 'success' => true,
