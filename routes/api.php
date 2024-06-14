@@ -2,12 +2,12 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\PasienController;
-use App\Http\Controllers\ObatController;
-use App\Http\Controllers\PerawatanController;
-use App\Http\Controllers\OperasiController;
-use App\Http\Controllers\LabController;
+use App\Http\Controllers\API\LoginController;
+use App\Http\Controllers\API\PasienController;
+use App\Http\Controllers\API\ObatController;
+use App\Http\Controllers\API\PerawatanController;
+use App\Http\Controllers\API\OperasiController;
+use App\Http\Controllers\API\LabController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,8 +38,10 @@ Route::get('kodePaket', [OperasiController::class, 'kodePaket']);
 Route::get('kodeRuangan', [OperasiController::class, 'kodeRuangan']);
 Route::post('boking', [OperasiController::class, 'boking']);
 
-// lab
+// lab not fix
 Route::post('Lab', [LabController::class, 'Lab'])->middleware(['auth:sanctum']);;
+
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

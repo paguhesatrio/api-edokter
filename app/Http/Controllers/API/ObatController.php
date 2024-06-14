@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -42,11 +42,6 @@ class ObatController extends Controller
         ]);
     } 
 
-    public function tampilForm()
-    {
-        return view('form_obat');
-    }
-
     public function tambahObat(Request $request)
     { 
         $request->validate([
@@ -73,7 +68,7 @@ class ObatController extends Controller
 
         $resep_obat = [
             'no_resep' => $noResep,
-            'tgl_perawatan' => $tanggalSekarang,
+            'tgl_perawatan' => null,
             'jam' => "00:00:00",
             'no_rawat' => $request->input('no_rawat'),
             'kd_dokter' => $kdDokter,
