@@ -34,7 +34,7 @@
             {{-- end alert --}}
             <main class="form-signin">
                 <h1 class="h3 mb-3 fw-normal text-center">Please login</h1>
-                <form action="/petugas/login" method="post">
+                <form action="{{ url('/login') }}" method="post">
                     @csrf
                     <div class="form-floating">
                         <input type="text" name="nik" class="form-control @error('nik') is-invalid @enderror" id="nik" placeholder="NIK" autofocus required value="{{ old('nik') }}">

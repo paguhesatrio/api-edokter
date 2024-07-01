@@ -43,5 +43,14 @@
         </li>
       </ul>
 
+      <ul class="nav flex-column">
+        <li class="nav-item">
+              <a class="nav-link" href="{{ url('/riwayatPengobatan?no_rawat=' . $no_rawat) }}">
+                <span data-feather="file-text"></span>
+                Riwayat Pengobatan
+            </a>
+        </li>
+     </ul>
+
     </div>
   </nav>

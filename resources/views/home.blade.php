@@ -84,6 +84,10 @@
                                     <a href="{{ url('/perawatan?no_rawat=' . $p->no_rawat) }}"
                                         class="badge bg-info text-decoration-none">action</a>
                                 </td>
+                                <td>
+                                    <a href="{{ url('/riwayatPengobatan?no_rkm_medis=' . $p->no_rkm_medis) }}"
+                                        class="badge bg-info text-decoration-none">action</a>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

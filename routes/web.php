@@ -5,6 +5,7 @@ use App\Http\Controllers\Login;
 use App\Http\Controllers\PasienController;
 use App\Http\Controllers\ObatController;
 use App\Http\Controllers\PerawatanController;
+use App\Http\Controllers\RiwayatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,7 +42,7 @@ Route::get('/perawatan', [PerawatanController::class, 'FormSoap'])->name('perawa
 Route::post('/perawatan', [PerawatanController::class, 'Soap'])->name('perawatan.soap');
 Route::delete('/perawatan', [PerawatanController::class, 'Hapus'])->name('pemeriksaan.destroy');
 
-
-
-
 // riwayat obat dan penunjnag
+Route::get('/riwayatPengobatan', [RiwayatController::class, 'RiwayatPengobatan'])->name('riwayat.pengobatan');
+
+

@@ -41,7 +41,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto py-0">
-                        <a href="/petugas/login" class="nav-item nav-link">Login</a>
+                        <a href={{ url('/login') }} class="nav-item nav-link">Login</a>
                     </div>
                 </div>
             </nav>
@@ -52,7 +52,7 @@
                         <div class="col-lg-6 text-center text-lg-start">
                             <h1 class="text-white mb-4 animated zoomIn">E-Dokter RSUD Pemangkat</h1>
                             <p class="text-white pb-3 animated zoomIn">Silhakan Login Seusia User dan Password yang sudah ada</p>
-                            <a href="\petugas\login" class="btn btn-outline-light rounded-pill border-2 py-3 px-5 animated slideInRight">LOGIN</a>
+                            <a href={{ url('/login') }} class="btn btn-outline-light rounded-pill border-2 py-3 px-5 animated slideInRight">LOGIN</a>
                         </div>
                         <div class="col-lg-6 text-center text-lg-start">
                             <img class="img-fluid animated zoomIn" src="img/dokter.png" alt="">

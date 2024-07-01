@@ -8,6 +8,8 @@ use App\Http\Controllers\API\ObatController;
 use App\Http\Controllers\API\PerawatanController;
 use App\Http\Controllers\API\OperasiController;
 use App\Http\Controllers\API\LabController;
+use App\Http\Controllers\RiwayatController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +43,9 @@ Route::post('boking', [OperasiController::class, 'boking']);
 // lab not fix
 Route::post('Lab', [LabController::class, 'Lab'])->middleware(['auth:sanctum']);
 
+Route::get('riwayat', [RiwayatController::class, 'RiwayatPengobatan']);
+
+Route::get('riwayat1', [RiwayatController::class, 'RiwayatPenunjang']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
