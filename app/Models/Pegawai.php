@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Pasien extends Model
+class Pegawai extends Model
 {
-    use HasFactory ;
+    use HasFactory;
 
-    protected $table = 'pasien';
-    protected $primaryKey = 'no_rkm_medis';
-    
+    protected $table = 'pegawai';
+    protected $primaryKey = 'id';
     public $incrementing = false;
     public $timestamps = false;
 

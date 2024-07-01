@@ -39,8 +39,7 @@ Route::get('kodeRuangan', [OperasiController::class, 'kodeRuangan']);
 Route::post('boking', [OperasiController::class, 'boking']);
 
 // lab not fix
-Route::post('Lab', [LabController::class, 'Lab'])->middleware(['auth:sanctum']);;
-
+Route::post('Lab', [LabController::class, 'Lab'])->middleware(['auth:sanctum']);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

@@ -3,52 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\RegPeriksa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ObatController extends Controller
 {
-    public function tampilObat(Request $request)
+
+    public function resepObat(Request $request)
     {
-        $hasViewedPasien = true; 
+        $no_rawat = $request->input('no_rawat');
 
-        if ($hasViewedPasien) {
-            $obat = DB::table('gudangbarang')->get();
-           
-            return response()->json([
-                'success' => true,
-                'message' => 'Data obat berhasil dimuat',
-                'data' => $obat
-            ]);
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Anda harus melihat data pasien terlebih dahulu',
-                'data' => null
-            ], 403); 
-        }
-    }
+        $pasien = RegPeriksa::with('pasien')->where('no_rawat', $no_rawat)->first();
 
-    public function tampilAturanPakai(Request $request)
-    {
+        $obat = DB::table('databarang')->get(['kode_brng', 'nama_brng']);
 
-        $obat = DB::table('master_aturan_pakai')->get();
-           
-        return response()->json([
-            'success' => true,
-            'message' => 'Data aturan pakai berhasil dimuat',
-            'data' => $obat
-        ]);
-    } 
+        $aturan = DB::table('master_aturan_pakai')->get(['aturan']);
 
-    public function tampilForm()
-    {
-        return view('form_obat');
+        return view('/obat/obat', compact('no_rawat', 'pasien', 'obat', 'aturan'));
     }
 
     public function tambahObat(Request $request)
-    { 
+    {
         $request->validate([
             'no_rawat' => 'required',
             'kode_brng' => 'required|array',
@@ -56,58 +33,75 @@ class ObatController extends Controller
             'aturan_pakai' => 'required|array',
             'jmlh_obat' => 'required',
         ]);
-    
+
         // Mendapatkan tanggal saat iniw
         $tanggalSekarang = date('Ymd');
         $jamSekarang = date('H:i:s');
-    
+
         // Menghitung nomor antrian berdasarkan jumlah resep pada hari tersebut
         $jumlahResepHariIni = DB::table('resep_obat')
-                                ->whereDate('tgl_perawatan', '=', date('Y-m-d'))
-                                ->count();
-    
+            ->whereDate('tgl_peresepan', '=', date('Y-m-d'))
+            ->count();
+
         $noResep = $tanggalSekarang . str_pad($jumlahResepHariIni + 1, 4, '0', STR_PAD_LEFT);
-    
+
         // Mengambil kode dokter dari token
         $kdDokter = Auth::user()->nik;
 
         $resep_obat = [
             'no_resep' => $noResep,
-            'tgl_perawatan' => $tanggalSekarang,
+            'tgl_perawatan' => "0000-00-00",
             'jam' => "00:00:00",
             'no_rawat' => $request->input('no_rawat'),
             'kd_dokter' => $kdDokter,
             'tgl_peresepan' => $tanggalSekarang,
-            'jam_peresepan' => $jamSekarang ,
+            'jam_peresepan' => $jamSekarang,
             'status' => 'ralan',
-            'tgl_penyerahan' => $tanggalSekarang,  
-            'jam_penyerahan' =>  "00:00:00",    
+            'tgl_penyerahan' => "0000-00-00",
+            'jam_penyerahan' =>  "00:00:00",
         ];
-    
+
         // Simpan resep obat
         DB::table('resep_obat')->insert($resep_obat);
-    
+
         // Memasukkan resep dokter sebanyak jmlh_obat
         $resep_dokter_data = [];
         for ($i = 0; $i < $request->input('jmlh_obat'); $i++) {
             $resep_dokter_data[] = [
                 'no_resep' => $noResep,
                 'kode_brng' => $request->input('kode_brng')[$i],
-                'jml'=> $request->input('jml')[$i],
-                'aturan_pakai'=> $request->input('aturan_pakai')[$i],
+                'jml' => $request->input('jml')[$i],
+                'aturan_pakai' => $request->input('aturan_pakai')[$i],
             ];
         }
-    
+
         // Simpan resep dokter
         DB::table('resep_dokter')->insert($resep_dokter_data);
-    
+
         return response()->json([
             'success' => true,
             'message' => 'Data aturan pakai berhasil dimuat',
             'data1' => $resep_obat,
             'data' => $resep_dokter_data,
-        ]); 
+        ]);
     }
+
+
+    public function resepRacikan(Request $request)
+    {
+        $no_rawat = $request->input('no_rawat');
+
+        $pasien = RegPeriksa::with('pasien')->where('no_rawat', $no_rawat)->first();
+
+        $obat = DB::table('databarang')->get(['kode_brng', 'nama_brng']);
+
+        $aturan = DB::table('master_aturan_pakai')->get(['aturan']);
+
+        $metode = DB::table('metode_racik')->get(['kd_racik', 'nm_racik']);
+
+        return view('/obat/racikan', compact('no_rawat', 'pasien', 'obat', 'aturan', "metode"));
+    }
+
 
     public function tambahObatRacikan(Request $request)
     { 
@@ -132,24 +126,25 @@ class ObatController extends Controller
     
         // Menghitung nomor antrian berdasarkan jumlah resep pada hari tersebut
         $jumlahResepHariIni = DB::table('resep_obat')
-                                ->whereDate('tgl_perawatan', '=', date('Y-m-d'))
-                                ->count();
-    
+            ->whereDate('tgl_peresepan', '=', date('Y-m-d'))
+            ->count();
+
         $noResep = $tanggalSekarang . str_pad($jumlahResepHariIni + 1, 4, '0', STR_PAD_LEFT);
+
     
         // Mengambil kode dokter dari token
         $kdDokter = Auth::user()->nik;
     
         $resep_obat = [
             'no_resep' => $noResep,
-            'tgl_perawatan' => null,
+            'tgl_perawatan' => "0000-00-00",
             'jam' => "00:00:00",
             'no_rawat' => $request->input('no_rawat'),
             'kd_dokter' => $kdDokter,
             'tgl_peresepan' => $tanggalSekarang,
             'jam_peresepan' => $jamSekarang,
             'status' => 'ralan',
-            'tgl_penyerahan' => $tanggalSekarang,  
+            'tgl_penyerahan' => "0000-00-00",  
             'jam_penyerahan' =>  "00:00:00",    
         ];
         DB::table('resep_obat')->insert($resep_obat);
@@ -199,4 +194,5 @@ class ObatController extends Controller
             'data' => $resep_dokter_racikan_detail,
         ]); 
     }
+    
 }

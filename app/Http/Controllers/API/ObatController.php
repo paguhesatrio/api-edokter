@@ -58,13 +58,14 @@ class ObatController extends Controller
     
         // Menghitung nomor antrian berdasarkan jumlah resep pada hari tersebut
         $jumlahResepHariIni = DB::table('resep_obat')
-                                ->whereDate('tgl_perawatan', '=', date('Y-m-d'))
+                                ->whereDate('tgl_peresepan', '=', date('Y-m-d'))
                                 ->count();
     
         $noResep = $tanggalSekarang . str_pad($jumlahResepHariIni + 1, 4, '0', STR_PAD_LEFT);
     
         // Mengambil kode dokter dari token
         $kdDokter = Auth::user()->nik;
+
 
         $resep_obat = [
             'no_resep' => $noResep,
@@ -127,10 +128,11 @@ class ObatController extends Controller
     
         // Menghitung nomor antrian berdasarkan jumlah resep pada hari tersebut
         $jumlahResepHariIni = DB::table('resep_obat')
-                                ->whereDate('tgl_perawatan', '=', date('Y-m-d'))
-                                ->count();
-    
+            ->whereDate('tgl_peresepan', '=', date('Y-m-d'))
+            ->count();
+
         $noResep = $tanggalSekarang . str_pad($jumlahResepHariIni + 1, 4, '0', STR_PAD_LEFT);
+
     
         // Mengambil kode dokter dari token
         $kdDokter = Auth::user()->nik;

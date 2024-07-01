@@ -25,7 +25,7 @@ class Login extends Controller
         if(Auth::attempt($credentials))
         {
             $request->session()->regenerate();
-
+            
             return redirect()->intended('/home');
         }
         return back()->with('loginError', 'Login Failed!!!');
