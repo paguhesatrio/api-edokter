@@ -1,10 +1,15 @@
 @extends('components.main')
 
 @section('container')
+    <!--  Bootstrap 4 untuk modal -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-<body>
+    <!-- DataTables -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
     <div class="container">
-
         <h2 class="mt-3">Resep Obat</h2>
 
         <button type="button" id="addForm" class="btn btn-success mt-3 mb-3">Tambah Obat</button>
@@ -13,7 +18,8 @@
             @csrf
             <div class="form-group">
                 <label for="no_rawat">No Rawat</label>
-                <input type="text" class="form-control" id="no_rawat" name="no_rawat" value="{{ $no_rawat }}" readonly>
+                <input type="text" class="form-control" id="no_rawat" name="no_rawat" value="{{ $no_rawat }}"
+                    readonly>
             </div>
 
             <div class="form-group">
@@ -22,30 +28,29 @@
             </div>
 
             <div id="formContainer">
-                <div class="form-group">
+                <div class="obat-form" id="obatForm1">
                     <h2>Obat ke 1</h2>
-                    <label for="kode_brng">Nama Obat</label>
-                    <select name="kode_brng[]" class="form-control" required>
-                        <option value="">Pilih Obat</option>
-                        @foreach ($obat as $item)
-                            <option value="{{ $item->kode_brng }}">{{ $item->nama_brng }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                    <label for="kode_brng1">Kode Obat</label>
+                    <div class="input-group mb-3">
+                        <input type="text" id="kode_brng1" name="kode_brng[]" class="form-control" readonly>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalObat"
+                                data-field="kode_brng1">Pilih Obat</button>
+                        </div>
+                    </div>
 
-                <div class="form-group">
-                    <label for="jml">Jumlah Obat</label>
+                    <label for="jml1">Jumlah Obat</label>
                     <input type="number" name="jml[]" class="form-control" required>
-                </div>
 
-                <div class="form-group">
-                    <label for="aturan_pakai">Aturan Pakai:</label>
+                    <label for="aturan_pakai1">Aturan Pakai:</label>
                     <select name="aturan_pakai[]" class="form-control" required>
                         <option value="">Pilih aturan</option>
                         @foreach ($aturan as $item)
                             <option value="{{ $item->aturan }}">{{ $item->aturan }}</option>
                         @endforeach
                     </select>
+
+                    <button type="button" class="btn btn-danger mt-2 removeForm" data-id="1">Hapus Obat</button>
                 </div>
             </div>
 
@@ -58,9 +63,63 @@
         </form>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Modal Pilih Obat -->
+    <div class="modal fade" id="modalObat" tabindex="-1" role="dialog" aria-labelledby="modalObatLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalObatLabel">Pilih Obat</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @isset($obat)
+                        @if ($obat->isEmpty())
+                            <p>Tidak ada data obat.</p>
+                        @else
+                            <table id="tabelObat" class="display">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama Obat</th>
+                                        <th>Stok</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($obat as $item)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $item->nama_brng }}</td>
+                                            <td>{{ $item->barang->stok ?? 'N/A' }}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-info pilih-obat-btn"
+                                                    data-id="{{ $item->kode_brng }}"
+                                                    data-nama="{{ $item->nama_brng }}">Pilih</button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        @endif
+                    @endisset
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function() {
+            // Inisialisasi DataTables
+            $('#tabelObat').DataTable({
+                "pageLength": 5
+            });
+
             let formCount = 1;
 
             // Tambah form baru saat tombol Tambah Form diklik
@@ -70,13 +129,13 @@
                 const newForm = `
                 <div class="obat-form" id="obatForm${formCount}">
                     <h2>Obat ke ${formCount}</h2>
-                    <label for="kode_brng${formCount}">Nama Obat</label>
-                    <select name="kode_brng[]" class="form-control" required>
-                        <option value="">Pilih Obat</option>
-                        @foreach ($obat as $item)
-                            <option value="{{ $item->kode_brng }}">{{ $item->nama_brng }}</option>
-                        @endforeach
-                    </select>
+                    <label for="kode_brng${formCount}">Kode Obat</label>
+                    <div class="input-group mb-3">
+                        <input type="text" id="kode_brng${formCount}" name="kode_brng[]" class="form-control" readonly>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalObat" data-field="kode_brng${formCount}">Pilih Obat</button>
+                        </div>
+                    </div>
                     
                     <label for="jml${formCount}">Jumlah:</label>
                     <input type="number" name="jml[]" class="form-control" required>
@@ -85,18 +144,32 @@
                     <select name="aturan_pakai[]" class="form-control" required>
                         <option value="">Pilih aturan</option>
                         @foreach ($aturan as $item)
-                            <option value="{{ $item->aturan }}">{{ $item->aturan }}</option>
+                        <option value="{{ $item->aturan }}">{{ $item->aturan }}</option>
                         @endforeach
                     </select>
                     
                     <button type="button" class="btn btn-danger mt-2 removeForm" data-id="${formCount}">Hapus Obat</button>
                 </div>
-                `;
+            `;
 
                 $('#formContainer').append(newForm);
 
                 // Update jumlah jenis obat
                 $('#jmlh_obat').val(formCount);
+            });
+
+            // Tampilkan modal obat saat tombol Pilih Obat diklik
+            $(document).on('click', '[data-toggle="modal"][data-target="#modalObat"]', function() {
+                const fieldId = $(this).data('field');
+                $('#modalObat').data('field', fieldId);
+            });
+
+            // Pilih obat dari modal
+            $(document).on('click', '.pilih-obat-btn', function() {
+                const selectedObatKode = $(this).data('id'); // Ambil kode obat
+                const fieldId = $('#modalObat').data('field');
+                $(`#${fieldId}`).val(selectedObatKode); // Masukkan kode obat ke input yang relevan
+                $('#modalObat').modal('hide');
             });
 
             // Hapus form obat saat tombol Hapus Obat diklik
@@ -115,5 +188,5 @@
             });
         });
     </script>
-</body>
+
 @endsection

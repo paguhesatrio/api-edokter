@@ -5,16 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Databarang extends Model
+class Gudangbarang extends Model
 {
-    protected $table = 'databarang';
+    use HasFactory;
+    protected $table = 'gudangbarang';
     protected $primaryKey = 'kode_brng';
     public $incrementing = false;
     public $timestamps = false;
-
-    public function barang()
-    {
-        return $this->belongsTo(Gudangbarang::class, 'kode_brng', 'kode_brng');
-    }
-
 }

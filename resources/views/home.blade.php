@@ -18,7 +18,7 @@
 <body>
     <nav class="navbar navbar-expand-lg bg-white sticky-top navbar-light p-3 shadow-sm">
         <div class="container">
-            <a class="navbar-brand" style="color: #9c5518;"><i class="bi bi-hospital"></i> {{ auth()->user()->name }}
+            <a class="navbar-brand" style="color: #9c5518;"><i class="bi bi-hospital"></i> {{ auth()->user()->pegawai->nama }}
             </a>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav ms-auto">
@@ -82,10 +82,6 @@
                                 <td>{{ $p->pasien->nm_pasien }}</td>
                                 <td>
                                     <a href="{{ url('/perawatan?no_rawat=' . $p->no_rawat) }}"
-                                        class="badge bg-info text-decoration-none">action</a>
-                                </td>
-                                <td>
-                                    <a href="{{ url('/riwayatPengobatan?no_rkm_medis=' . $p->no_rkm_medis) }}"
                                         class="badge bg-info text-decoration-none">action</a>
                                 </td>
                             </tr>

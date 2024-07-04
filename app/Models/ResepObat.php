@@ -5,19 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Pasien extends Model
+class ResepObat extends Model
 {
     use HasFactory;
 
-    protected $table = 'pasien';
-    protected $primaryKey = 'no_rkm_medis';
+    protected $table = 'resep_obat';
+    protected $primaryKey = 'no_resep';
     public $incrementing = false;
     public $timestamps = false;
 
-    public function ReqPeriksa()
+    public function resepDokter()
     {
-        return $this->hasMany(RegPeriksa::class, 'no_rkm_medis', 'no_rkm_medis');
+        return $this->belongsTo(ResepDokter::class, 'no_resep', 'no_resep');
     }
-
-    
 }

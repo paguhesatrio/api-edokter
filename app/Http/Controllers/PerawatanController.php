@@ -12,23 +12,26 @@ use Carbon\Carbon;
 
 class PerawatanController extends Controller
 {
-
     public function FormSoap(Request $request)
     {
         $no_rawat = $request->input('no_rawat');
-        $tanggal = $request->input('tanggal', Carbon::today()->toDateString());
-
+    
         $pasien = RegPeriksa::with('pasien')->where('no_rawat', $no_rawat)->first();
+    
+        $tgl_registrasi = $pasien->tgl_registrasi;
+    
+        $tanggal = $request->input('tanggal', $tgl_registrasi);
+    
         $nip = DB::table('pemeriksaan_ralan')->where('no_rawat', $no_rawat)->pluck('nip')->first();
-
+    
         $pemeriksaan = Perawatan::with('pegawai')
             ->where('no_rawat', $no_rawat)
             ->whereDate('tgl_perawatan', $tanggal)
             ->get();
-
-        return view('perawatan.soap', compact('no_rawat', 'pasien', 'tanggal', 'pemeriksaan'));
+    
+        return view('perawatan.soap', compact('no_rawat', 'pasien', 'tgl_registrasi', 'pemeriksaan', 'tanggal'));
     }
-
+    
 
     public function Soap(Request $request)
     {
@@ -49,8 +52,8 @@ class PerawatanController extends Controller
             'lingkar_perut' => 'required',
             'rtl' => 'required',
             'penilaian' => 'required',
-            'instruksi' => 'required',
-            'evaluasi' => 'required',
+            'instruksi' => '',
+            'evaluasi' => '',
         ]);
 
         $tanggalSekarang = date('Ymd');
@@ -76,8 +79,8 @@ class PerawatanController extends Controller
             'lingkar_perut' => $request->input('lingkar_perut'),
             'rtl' => $request->input('rtl'),
             'penilaian' => $request->input('penilaian'),
-            'instruksi' => $request->input('instruksi'),
-            'evaluasi' => $request->input('evaluasi'),
+            'instruksi' => $request->input('instruksi') ?? '', 
+            'evaluasi' => $request->input('evaluasi') ?? '', 
             'nip' => $kdDokter,
         ];
 

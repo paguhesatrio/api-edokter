@@ -1,33 +1,64 @@
-@extends('components.main')
+@extends('components.riwayat.mainRiwayat')
 
 @section('container')
-
 <div class="container">
     <h1>Riwayat Pengobatan</h1>
+    <p>{{ $pasien->nm_pasien }}</p>
 
     @if (isset($history) && !$history->isEmpty())
         @foreach ($history as $no_rawat => $items)
-            <div>
-                <h3>No Rawat: {{ $no_rawat }}</h3>
-                <p><strong>Tanggal Perawatan:</strong> {{ $items->first()->tgl_perawatan }}</p>
-                <p><strong>Jam:</strong> {{ $items->first()->jam }}</p>
-                <p><strong>Status:</strong> {{ $items->first()->status }}</p>
-                <p><strong>Kode Bangsal:</strong> {{ $items->first()->kd_bangsal }}</p>
-                <p><strong>No. Batch:</strong> {{ $items->first()->no_batch }}</p>
-                <p><strong>No. Faktur:</strong> {{ $items->first()->no_faktur }}</p>
-                <h4>Data Barang:</h4>
-                <ul>
-                    @foreach ($items as $item)
-                        <li>
-                            <strong>Kode Barang:</strong> {{ $item->dataBarang->kode_brng }}<br>
-                            <strong>Nama Barang:</strong> {{ $item->dataBarang->nama_brng }}<br>
-                            <strong>Harga Beli:</strong> {{ $item->h_beli }}<br>
-                            <strong>Biaya Obat:</strong> {{ $item->biaya_obat }}<br>
-                            <strong>Jumlah:</strong> {{ $item->jml }}<br>
-                            <strong>Total:</strong> {{ $item->total }}
-                        </li>
-                    @endforeach
-                </ul>
+            <div class="table-responsive mb-4">
+                <h3>No Rawat : {{ $no_rawat }}</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Dokter</th>
+                            <th>Cara Bayar</th>
+                            <th>Tanggal Perawatan</th>
+                            <th>Jam</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            @if (isset($dokter[$no_rawat]) && !$dokter[$no_rawat]->isEmpty())
+                                <td>{{ $dokter[$no_rawat]->first()->dokter->nm_dokter }}</td>
+                            @else
+                                <td>-</td>
+                            @endif
+                            <td>{{ $pasien->kd_pj }}</td>
+                            <td>{{ $items->first()->tgl_perawatan }}</td>
+                            <td>{{ $items->first()->jam }}</td>
+                            <td>{{ $items->first()->status }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Data Obat:</h4>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Kode Obat</th>
+                            <th>Nama Obat</th>
+                            <th>Aturan Pakai</th>
+                            <th>Jumlah</th>
+                            <th>Tipe</th>
+                            <th>Harga</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($items as $item)
+                            <tr>
+                                <td>{{ $item->dataBarang->kode_brng }}</td>
+                                <td>{{ $item->dataBarang->nama_brng }}</td>
+                                <td>{{ $aturan[$no_rawat]->first()->resepDokter->aturan_pakai }}</td>
+                                <td>{{ $item->jml }}</td>
+                                <td>{{ $item->dataBarang->kode_sat }}</td>
+                                <td>{{ $item->total }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         @endforeach
     @else
