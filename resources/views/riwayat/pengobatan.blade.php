@@ -51,7 +51,7 @@
                             <tr>
                                 <td>{{ $item->dataBarang->kode_brng }}</td>
                                 <td>{{ $item->dataBarang->nama_brng }}</td>
-                                <td>{{ $aturan[$no_rawat]->first()->resepDokter->aturan_pakai }}</td>
+                                <td> - </td>
                                 <td>{{ $item->jml }}</td>
                                 <td>{{ $item->dataBarang->kode_sat }}</td>
                                 <td>{{ $item->total }}</td>
@@ -65,4 +65,6 @@
         <p>Tidak ada riwayat pengobatan untuk nomor rekam medis ini.</p>
     @endif
 </div>
+
+
 @endsection

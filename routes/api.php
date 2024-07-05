@@ -8,7 +8,7 @@ use App\Http\Controllers\API\ObatController;
 use App\Http\Controllers\API\PerawatanController;
 use App\Http\Controllers\API\OperasiController;
 use App\Http\Controllers\API\LabController;
-use App\Http\Controllers\RiwayatController;
+use App\Http\Controllers\API\RiwayatController;
 
 
 /*
@@ -24,6 +24,8 @@ use App\Http\Controllers\RiwayatController;
 // login
 Route::post('register', [LoginController::class, 'register']);
 Route::post('login', [LoginController::class, 'login']);
+Route::post('logout', [LoginController::class, 'logout']);
+
 
 // obat
 Route::get('tampilPasien', [PasienController::class, 'tampilPasien'])->middleware(['auth:sanctum']);

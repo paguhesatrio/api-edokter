@@ -18,4 +18,10 @@ class ResepDokter extends Model
     {
         return $this->hasMany(ResepObat::class, 'no_resep', 'no_resep');
     }
+
+    public function detailObat()
+    {
+        return $this->belongsTo(Databarang::class, 'kode_brng ', 'kode_brng ');
+    }
+
 }

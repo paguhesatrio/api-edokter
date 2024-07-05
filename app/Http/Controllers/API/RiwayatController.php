@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
 use App\Models\DetailpemberianObat;
 use App\Models\Dokter;
 use App\Models\Pasien;
@@ -42,7 +43,13 @@ class RiwayatController extends Controller
             ->get()
             ->groupBy('no_rawat');
 
-        return view('riwayat.pengobatan', compact('history', 'no_rkm_medis', 'pasien', 'dokter', 'resepObat'));
+        return response()->json([
+            'success' => true,
+            'message' => 'tastes',
+            'data' => $history,
+            'daat1' => $dokter,
+            'resepObat' => $resepObat
+        ]);
     }
 
     public function RiwayatPenunjang(Request $request)
