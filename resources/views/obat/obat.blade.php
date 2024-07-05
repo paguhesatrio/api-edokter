@@ -64,9 +64,8 @@
     </div>
 
     <!-- Modal Pilih Obat -->
-    <div class="modal fade" id="modalObat" tabindex="-1" role="dialog" aria-labelledby="modalObatLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="modalObat" tabindex="-1" role="dialog" aria-labelledby="modalObatLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalObatLabel">Pilih Obat</h5>
@@ -85,6 +84,7 @@
                                         <th>No</th>
                                         <th>Nama Obat</th>
                                         <th>Stok</th>
+                                        <th>Kandungan</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -94,6 +94,7 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $item->nama_brng }}</td>
                                             <td>{{ $item->barang->stok ?? 'N/A' }}</td>
+                                            <td>{{ $item->letak_barang }}</td>
                                             <td>
                                                 <button type="button" class="btn btn-info pilih-obat-btn"
                                                     data-id="{{ $item->kode_brng }}"
@@ -112,6 +113,8 @@
             </div>
         </div>
     </div>
+    
+    
 
     <script>
         $(document).ready(function() {
