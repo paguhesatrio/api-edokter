@@ -33,7 +33,7 @@
             @endif
             {{-- end alert --}}
             <main class="form-signin">
-                <h1 class="h3 mb-3 fw-normal text-center">Please login</h1>
+                <h1 class="h3 mb-3 fw-normal text-center">Please login 198606272014122001</h1>
                 <form action="{{ url('/login') }}" method="post">
                     @csrf
                     <div class="form-floating">

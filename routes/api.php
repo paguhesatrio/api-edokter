@@ -24,7 +24,7 @@ use App\Http\Controllers\API\RiwayatController;
 // login
 Route::post('register', [LoginController::class, 'register']);
 Route::post('login', [LoginController::class, 'login']);
-Route::post('logout', [LoginController::class, 'logout']);
+Route::middleware('auth:sanctum')->post('/logout', [LoginController::class, 'logout']);
 
 
 // obat

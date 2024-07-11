@@ -17,6 +17,7 @@ class PasienController extends Controller
         $pasien = RegPeriksa::with('pasien')
             ->where('kd_dokter', $dokter)
             ->whereDate('tgl_registrasi', $tanggal)
+            ->where('status_lanjut', '!=', 'Ranap') 
             ->get();
 
         return view('home', ['pasien' => $pasien, 'tanggal' => $tanggal]);

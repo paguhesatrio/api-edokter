@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\DetailpemberianObat;
+use App\Models\DetailPeriksaLab;
 use App\Models\Dokter;
+use App\Models\HasilRadiologi;
 use App\Models\Pasien;
 use App\Models\Perawatan;
 use App\Models\PeriksaLab;
@@ -20,54 +22,62 @@ class RiwayatController extends Controller
     {
         $no_rkm_medis = $request->input('no_rkm_medis');
 
-        $pasien = Pasien::with('ReqPeriksa')->find($no_rkm_medis);
+        $pasien = Pasien::with('regPeriksa')->findOrFail($no_rkm_medis);
 
-        $no_rawats = $pasien->ReqPeriksa->pluck('no_rawat');
+        $no_rawats = $pasien->regPeriksa->pluck('no_rawat');
 
-        $history = DetailpemberianObat::with('dataBarang')
+        $history = DetailPemberianObat::with(['dataBarang'])
             ->whereIn('no_rawat', $no_rawats)
             ->orderBy('tgl_perawatan', 'desc')
             ->get()
             ->groupBy('no_rawat');
 
-        // dokter
+        $aturan = ResepObat::with('resepDokter')
+            ->whereIn('no_rawat', $no_rawats)
+            ->get()
+            ->groupBy('no_rawat');
+
         $dokter = RegPeriksa::with('dokter')
             ->whereIn('no_rawat', $no_rawats)
             ->get()
             ->groupBy('no_rawat');
 
-
-        $resepObat  = ResepObat::with('resepDokter.detailObat')
-            ->whereIn('no_rawat', $no_rawats)
-            ->get()
-            ->groupBy('no_rawat');
-
-        return view('riwayat.pengobatan', compact('history', 'no_rkm_medis', 'pasien', 'dokter', 'resepObat'));
+        return view('riwayat.pengobatan', compact('history', 'no_rkm_medis', 'pasien', 'dokter', 'aturan'));
     }
 
     public function RiwayatPenunjang(Request $request)
     {
         $no_rkm_medis = $request->input('no_rkm_medis');
 
-        // $no_rkm_medis ="162131";
+        $pasien = Pasien::with('RegPeriksa')->find($no_rkm_medis);
 
-        $pasien = Pasien::with('ReqPeriksa')->find($no_rkm_medis);
+        $no_rawat = $pasien->RegPeriksa->pluck('no_rawat');
 
-        $no_rawat = $pasien->ReqPeriksa->pluck('no_rawat');
-
-        $history = PeriksaRadiologi::with('kdjenis')
+        $radiologi = PeriksaRadiologi::with('kdjenis')
             ->whereIn('no_rawat', $no_rawat)
             ->get();
 
-        $history1 = PeriksaLab::with('kdjenis')
+        $hasilradiologi = HasilRadiologi::whereIn('no_rawat', $no_rawat)
+            ->get()
+            ->keyBy('no_rawat');
+
+        $gambarRadiologi = DB::table('gambar_radiologi')
             ->whereIn('no_rawat', $no_rawat)
             ->get();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'tastes',
-            'data' => $history,
-            'daat1' => $history1
-        ]);
+        $lab = PeriksaLab::with('kdjenis')
+            ->whereIn('no_rawat', $no_rawat)
+            ->get();
+
+        $detailLab = DetailPeriksaLab::with('laboratorium')
+            ->whereIn('no_rawat', $no_rawat)
+            ->get();
+
+        $dokter = RegPeriksa::with('dokter')
+            ->whereIn('no_rawat', $no_rawat)
+            ->get()
+            ->groupBy('no_rawat');
+
+        return view('riwayat.penunjang', compact('radiologi', 'lab', 'pasien', 'dokter', 'hasilradiologi', 'gambarRadiologi', 'detailLab'));
     }
 }

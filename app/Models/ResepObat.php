@@ -11,11 +11,15 @@ class ResepObat extends Model
 
     protected $table = 'resep_obat';
     protected $primaryKey = 'no_resep';
-    public $incrementing = false;
-    public $timestamps = false;
+
 
     public function resepDokter()
     {
-        return $this->belongsTo(ResepDokter::class, 'no_resep', 'no_resep');
+        return $this->hasMany(ResepDokter::class, 'no_resep');
+    }
+
+    public function regPeriksa()
+    {
+        return $this->belongsTo(RegPeriksa::class, 'no_rawat', 'no_rawat');
     }
 }

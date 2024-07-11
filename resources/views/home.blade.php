@@ -70,6 +70,7 @@
                             <th scope="col">No RM</th>
                             <th scope="col">No Rawat</th>
                             <th scope="col">Nama</th>
+                            <th scope="col">Poli</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -80,9 +81,10 @@
                                 <td>{{ $p->no_rkm_medis }}</td>
                                 <td>{{ $p->no_rawat }}</td>
                                 <td>{{ $p->pasien->nm_pasien }}</td>
+                                <td>{{ $p->kd_poli }}</td>
                                 <td>
                                     <a href="{{ url('/perawatan?no_rawat=' . $p->no_rawat) }}"
-                                        class="badge bg-info text-decoration-none">action</a>
+                                        class="badge bg-info text-decoration-none">Eksekusi</a>
                                 </td>
                             </tr>
                         @endforeach

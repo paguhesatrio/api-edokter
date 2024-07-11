@@ -8,20 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class ResepDokter extends Model
 {
     use HasFactory;
-    
+
     protected $table = 'resep_dokter';
     protected $primaryKey = 'no_resep';
-    public $incrementing = false;
-    public $timestamps = false;
 
     public function resepObat()
     {
-        return $this->hasMany(ResepObat::class, 'no_resep', 'no_resep');
+        return $this->belongsTo(ResepObat::class, 'no_resep', 'no_resep');
     }
 
     public function detailObat()
     {
-        return $this->belongsTo(Databarang::class, 'kode_brng ', 'kode_brng ');
+        return $this->belongsTo(Databarang::class, 'kode_brng', 'kode_brng');
     }
-
 }

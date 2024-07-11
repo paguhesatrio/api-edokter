@@ -44,5 +44,7 @@ Route::delete('/perawatan', [PerawatanController::class, 'Hapus'])->name('pemeri
 
 // riwayat obat dan penunjnag
 Route::get('/riwayatPengobatan', [RiwayatController::class, 'RiwayatPengobatan'])->name('riwayat.pengobatan');
+Route::get('/riwayatPenunjang', [RiwayatController::class, 'RiwayatPenunjang'])->name('riwayat.penunjang');
+
 
 

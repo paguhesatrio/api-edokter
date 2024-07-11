@@ -14,7 +14,7 @@ class Pasien extends Model
     public $incrementing = false;
     public $timestamps = false;
 
-    public function ReqPeriksa()
+    public function RegPeriksa()
     {
         return $this->hasMany(RegPeriksa::class, 'no_rkm_medis', 'no_rkm_medis');
     }

@@ -1,6 +1,6 @@
 @extends('components.riwayat.mainRiwayat')
-
 @section('container')
+
 <div class="container">
     <h1>Riwayat Pengobatan</h1>
     <p>{{ $pasien->nm_pasien }}</p>
@@ -34,7 +34,7 @@
                     </tbody>
                 </table>
 
-                <h4>Data Obat:</h4>
+                <h4>Data Obat dan Aturan Pakai:</h4>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -51,10 +51,23 @@
                             <tr>
                                 <td>{{ $item->dataBarang->kode_brng }}</td>
                                 <td>{{ $item->dataBarang->nama_brng }}</td>
-                                <td> - </td>
+                                <td>
+                                    @if (isset($aturan[$no_rawat]))
+                                        @php
+                                            $aturanPakai = $aturan[$no_rawat]->flatMap(function($resep) use ($item) {
+                                                return $resep->resepDokter->filter(function($itemAturan) use ($item) {
+                                                    return $itemAturan->kode_brng == $item->dataBarang->kode_brng;
+                                                });
+                                            });
+                                        @endphp
+                                        @foreach ($aturanPakai as $itemAturan)
+                                            {{ $itemAturan->aturan_pakai }}<br>
+                                        @endforeach
+                                    @endif
+                                </td>
                                 <td>{{ $item->jml }}</td>
                                 <td>{{ $item->dataBarang->kode_sat }}</td>
-                                <td>{{ $item->total }}</td>
+                                <td>{{ number_format($item->total, 0, ',', '.') }}</td> 
                             </tr>
                         @endforeach
                     </tbody>
@@ -65,6 +78,4 @@
         <p>Tidak ada riwayat pengobatan untuk nomor rekam medis ini.</p>
     @endif
 </div>
-
-
 @endsection

@@ -12,4 +12,9 @@ class JnsPerawatanLab extends Model
     protected $primaryKey = 'kd_jenis_prw';
     public $incrementing = false;
     public $timestamps = false;
+
+    public function kdjenis()
+    {
+        return $this->belongsTo(PeriksaLab::class, 'kd_jenis_prw', 'kd_jenis_prw');
+    }
 }

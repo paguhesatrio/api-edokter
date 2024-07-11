@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\DetailpemberianObat;
 use App\Models\Dokter;
+use App\Models\HasilRadiologi;
 use App\Models\Pasien;
 use App\Models\Perawatan;
 use App\Models\PeriksaLab;
@@ -21,9 +22,9 @@ class RiwayatController extends Controller
     {
         $no_rkm_medis = $request->input('no_rkm_medis');
 
-        $pasien = Pasien::with('ReqPeriksa')->find($no_rkm_medis);
+        $pasien = Pasien::with('RegPeriksa')->find($no_rkm_medis);
 
-        $no_rawats = $pasien->ReqPeriksa->pluck('no_rawat');
+        $no_rawats = $pasien->RegPeriksa->pluck('no_rawat');
 
         $history = DetailpemberianObat::with('dataBarang')
             ->whereIn('no_rawat', $no_rawats)
@@ -56,25 +57,39 @@ class RiwayatController extends Controller
     {
         $no_rkm_medis = $request->input('no_rkm_medis');
 
-        // $no_rkm_medis ="162131";
+        $pasien = Pasien::with('RegPeriksa')->find($no_rkm_medis);
 
-        $pasien = Pasien::with('ReqPeriksa')->find($no_rkm_medis);
+        $no_rawat = $pasien->RegPeriksa->pluck('no_rawat');
 
-        $no_rawat = $pasien->ReqPeriksa->pluck('no_rawat');
-
-        $history = PeriksaRadiologi::with('kdjenis')
+        $radiologi = PeriksaRadiologi::with('kdjenis')
             ->whereIn('no_rawat', $no_rawat)
             ->get();
 
-        $history1 = PeriksaLab::with('kdjenis')
+        $hasilradiologi = HasilRadiologi::whereIn('no_rawat', $no_rawat)
+            ->get()
+            ->keyBy('no_rawat');
+
+        $gambarRadiologi = DB::table('gambar_radiologi')
             ->whereIn('no_rawat', $no_rawat)
             ->get();
+
+
+        $lab = PeriksaLab::with('kdjenis')
+            ->whereIn('no_rawat', $no_rawat)
+            ->get();
+
+        $dokter = RegPeriksa::with('dokter')
+            ->whereIn('no_rawat', $no_rawat)
+            ->get()
+            ->groupBy('no_rawat');
 
         return response()->json([
             'success' => true,
             'message' => 'tastes',
-            'data' => $history,
-            'daat1' => $history1
+            'data' => $radiologi,
+            'daat1' => $hasilradiologi,
+            'daat1' => $gambarRadiologi,
+
         ]);
     }
 }

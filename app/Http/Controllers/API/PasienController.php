@@ -19,6 +19,7 @@ class PasienController extends Controller
     
         $pasien = DB::table('reg_periksa')
                     ->whereDate('tgl_registrasi', $tanggal)
+                    ->where('status_lanjut', '!=', 'Ranap') 
                     ->get();
     
         return response()->json([

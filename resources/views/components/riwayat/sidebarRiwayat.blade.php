@@ -12,6 +12,12 @@
                   Riwayat Pengobatan
               </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url('/riwayatPenunjang?no_rkm_medis=' . $pasien->no_rkm_medis) }}">
+                <span data-feather="file-text"></span>
+                Riwayat Penunjang
+            </a>
+        </li>
       </ul>
 
   </div>
