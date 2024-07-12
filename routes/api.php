@@ -8,6 +8,7 @@ use App\Http\Controllers\API\ObatController;
 use App\Http\Controllers\API\PerawatanController;
 use App\Http\Controllers\API\OperasiController;
 use App\Http\Controllers\API\LabController;
+use App\Http\Controllers\API\RadiologiController;
 use App\Http\Controllers\API\RiwayatController;
 
 
@@ -35,7 +36,7 @@ Route::post('tambahObat', [ObatController::class, 'tambahObat'])->middleware(['a
 Route::post('tambahObatRacikan', [ObatController::class, 'tambahObatRacikan'])->middleware(['auth:sanctum']);
 
 // soap
-Route::post('Soap', [PerawatanController::class, 'Soap'])->middleware(['auth:sanctum']);
+Route::post('soap', [PerawatanController::class, 'Soap'])->middleware(['auth:sanctum']);
 
 // permintaan Operasi
 Route::get('kodePaket', [OperasiController::class, 'kodePaket']);
@@ -45,9 +46,13 @@ Route::post('boking', [OperasiController::class, 'boking']);
 // lab not fix
 Route::post('Lab', [LabController::class, 'Lab'])->middleware(['auth:sanctum']);
 
-Route::get('riwayat', [RiwayatController::class, 'RiwayatPengobatan']);
+//radiologi
+Route::post('radiologi', [RadiologiController::class, 'permintaanRadiologi'])->middleware(['auth:sanctum']);
 
-Route::get('riwayat1', [RiwayatController::class, 'RiwayatPenunjang']);
+//riwayat
+Route::get('riwayatObat', [RiwayatController::class, 'RiwayatPengobatan']);
+
+Route::get('riwayatPenunjang', [RiwayatController::class, 'RiwayatPenunjang']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

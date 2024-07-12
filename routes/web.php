@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RadiologiController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Login;
 use App\Http\Controllers\PasienController;
@@ -29,7 +30,6 @@ Route::post('/logout', [Login::class, 'logout'])->name('logout');
 
 Route::get('/home', [PasienController::class, 'tampilpasien'])->middleware('auth')->name('home');
 
-
 // tambahobat
 Route::get('/resepobat', [ObatController::class, 'resepObat'])->name('form-obat');
 Route::post('/tambah-obat', [ObatController::class, 'tambahObat'])->name('tambahObat');
@@ -38,9 +38,14 @@ Route::post('/tambah-obat', [ObatController::class, 'tambahObat'])->name('tambah
 Route::get('/resepracikan', [ObatController::class, 'resepRacikan'])->name('resep.racikan');
 Route::post('/tambah-obat-racikan', [ObatController::class, 'tambahObatRacikan'])->name('tambah.obat.racikan');
 
+// soap
 Route::get('/perawatan', [PerawatanController::class, 'FormSoap'])->name('perawatan.FormSoap');
 Route::post('/perawatan', [PerawatanController::class, 'Soap'])->name('perawatan.soap');
 Route::delete('/perawatan', [PerawatanController::class, 'Hapus'])->name('pemeriksaan.destroy');
+
+// radiologi 
+Route::get('/radiologi', [RadiologiController::class, 'FormRadiologi'])->name('permintaan.FormRadiologi');
+Route::post('/radiologi', [RadiologiController::class, 'permintaanRadiologi'])->name('radiologi.store');
 
 // riwayat obat dan penunjnag
 Route::get('/riwayatPengobatan', [RiwayatController::class, 'RiwayatPengobatan'])->name('riwayat.pengobatan');

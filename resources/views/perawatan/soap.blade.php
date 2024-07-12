@@ -4,13 +4,25 @@
 
     <body>
         <div class="container mt-5">
-            <h3>Data Pemeriksaan SOAP untuk {{ $pasien->pasien->nm_pasien }}</h3>
+            <h3>Pemeriksaan SOAP</h3>
+
+            @if ($pasien)
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Data Pasien</h5>
+                        <p class="card-text"><strong>Nama:</strong> {{ $pasien->pasien->nm_pasien }}</p>
+                        <p class="card-text"><strong>No Rekam Medis:</strong> {{ $pasien->no_rkm_medis }}</p>
+                        <p class="card-text"><strong>No Rawat:</strong> {{ $no_rawat }}</p>
+                    </div>
+                </div>
+            @endif
 
             <form action="{{ route('perawatan.soap') }}" method="GET" class="mb-4">
                 <div class="row g-3 align-items-end">
                     <div class="col-lg-3 col-md-6">
                         <label for="tanggal" class="form-label">Tanggal</label>
-                        <input type="date" class="form-control" id="tanggal" name="tanggal" value="{{ $tanggal ?? '' }}">
+                        <input type="date" class="form-control" id="tanggal" name="tanggal"
+                            value="{{ $tanggal ?? '' }}">
                     </div>
                     <input type="hidden" name="no_rawat" value="{{ $no_rawat }}">
                     <div class="col-auto">
@@ -99,24 +111,9 @@
             <form action="{{ route('perawatan.soap') }}" method="POST">
                 @csrf
 
-                <input type="hidden" name="no_rawat" value="{{ $no_rawat }}">
+                <input type="hidden" class="form-control" id="no_rawat" name="no_rawat"
+                value="{{ $no_rawat }}" readonly>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="no_rawat">No Rawat</label>
-                            <input type="text" class="form-control" id="no_rawat" name="no_rawat"
-                                value="{{ $no_rawat }}" readonly>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group mb-2">
-                            <label for="pasien">Pasien</label>
-                            <input type="text" class="form-control" id="pasien"
-                                value="{{ $pasien->pasien->nm_pasien }}" readonly>
-                        </div>
-                    </div>
-                </div>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">

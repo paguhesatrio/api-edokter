@@ -132,7 +132,6 @@ class ObatController extends Controller
 
         $noResep = $tanggalSekarang . str_pad($jumlahResepHariIni + 1, 4, '0', STR_PAD_LEFT);
 
-
         // Mengambil kode dokter dari token
         $kdDokter = Auth::user()->nik;
 

@@ -4,14 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\DetailpemberianObat;
 use App\Models\DetailPeriksaLab;
-use App\Models\Dokter;
 use App\Models\HasilRadiologi;
 use App\Models\Pasien;
-use App\Models\Perawatan;
 use App\Models\PeriksaLab;
 use App\Models\PeriksaRadiologi;
 use App\Models\RegPeriksa;
-use App\Models\ResepDokter;
 use App\Models\ResepObat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -53,7 +50,7 @@ class RiwayatController extends Controller
 
         $no_rawat = $pasien->RegPeriksa->pluck('no_rawat');
 
-        $radiologi = PeriksaRadiologi::with('kdjenis')
+        $radiologi = PeriksaRadiologi::with(['kdjenis', 'nip'])
             ->whereIn('no_rawat', $no_rawat)
             ->get();
 

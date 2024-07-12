@@ -28,8 +28,8 @@ class PerawatanController extends Controller
             'lingkar_perut' => 'required',
             'rtl' => 'required',
             'penilaian' => 'required',
-            'instruksi' => 'required',
-            'evaluasi' => 'required',
+            'instruksi' => '',
+            'evaluasi' => '',
         ]);
         
         $tanggalSekarang = date('Ymd');
@@ -55,8 +55,8 @@ class PerawatanController extends Controller
             'lingkar_perut' => $request->input('lingkar_perut'),
             'rtl' => $request->input('rtl'),
             'penilaian' => $request->input('penilaian'),
-            'instruksi' => $request->input('instruksi'),
-            'evaluasi' => $request->input('evaluasi'),
+            'instruksi' => $request->input('instruksi') ?? '', 
+            'evaluasi' => $request->input('evaluasi') ?? '', 
             'nip' => $kdDokter,
         ];
     

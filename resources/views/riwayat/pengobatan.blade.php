@@ -1,9 +1,17 @@
 @extends('components.riwayat.mainRiwayat')
+
 @section('container')
 
-<div class="container">
+<div class="container mt-5">
     <h1>Riwayat Pengobatan</h1>
-    <p>{{ $pasien->nm_pasien }}</p>
+
+    <div class="card mt-5 mb-5">
+        <div class="card-body">
+            <h5 class="card-title">Data Pasien</h5>
+            <p class="card-text"><strong>Nama:</strong> {{ $pasien->nm_pasien }}</p>
+            <p class="card-text"><strong>No Rekam Medis:</strong> {{ $pasien->no_rkm_medis }}</p>
+        </div>
+    </div>
 
     @if (isset($history) && !$history->isEmpty())
         @foreach ($history as $no_rawat => $items)

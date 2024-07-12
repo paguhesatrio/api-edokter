@@ -23,4 +23,9 @@ class PeriksaRadiologi extends Model
     {
         return $this->belongsTo(Dokter::class, 'kd_dokter', 'kd_dokter');
     }
+
+    public function nip()
+    {
+        return $this->belongsTo(Petugas::class, 'nip', 'nip');
+    }
 }

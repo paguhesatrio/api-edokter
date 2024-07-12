@@ -12,19 +12,24 @@
     <div class="container">
         <h2 class="mt-3">Resep Obat</h2>
 
+        @if ($pasien)
+            <div class="card mt-5 mb-5">
+                <div class="card-body">
+                    <h5 class="card-title">Data Pasien</h5>
+                    <p class="card-text"><strong>Nama:</strong> {{ $pasien->pasien->nm_pasien }}</p>
+                    <p class="card-text"><strong>No Rekam Medis:</strong> {{ $pasien->no_rkm_medis }}</p>
+                    <p class="card-text"><strong>No Rawat:</strong> {{ $no_rawat }}</p>
+                </div>
+            </div>
+        @endif
+
         <button type="button" id="addForm" class="btn btn-success mt-3 mb-3">Tambah Obat</button>
 
         <form action="{{ route('tambahObat') }}" method="POST" id="formObat">
             @csrf
             <div class="form-group">
-                <label for="no_rawat">No Rawat</label>
-                <input type="text" class="form-control" id="no_rawat" name="no_rawat" value="{{ $no_rawat }}"
+                <input type="hidden" class="form-control" id="no_rawat" name="no_rawat" value="{{ $no_rawat }}"
                     readonly>
-            </div>
-
-            <div class="form-group">
-                <label for="pasien">Pasien</label>
-                <input type="text" class="form-control" id="pasien" value="{{ $pasien->pasien->nm_pasien }}" readonly>
             </div>
 
             <div id="formContainer">
@@ -64,7 +69,8 @@
     </div>
 
     <!-- Modal Pilih Obat -->
-    <div class="modal fade" id="modalObat" tabindex="-1" role="dialog" aria-labelledby="modalObatLabel" aria-hidden="true">
+    <div class="modal fade" id="modalObat" tabindex="-1" role="dialog" aria-labelledby="modalObatLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -113,8 +119,8 @@
             </div>
         </div>
     </div>
-    
-    
+
+
 
     <script>
         $(document).ready(function() {
@@ -130,7 +136,7 @@
                 formCount++;
 
                 const newForm = `
-                <div class="obat-form" id="obatForm${formCount}">
+                <div class="obat-form mt-5" id="obatForm${formCount}">
                     <h2>Obat ke ${formCount}</h2>
                     <label for="kode_brng${formCount}">Kode Obat</label>
                     <div class="input-group mb-3">

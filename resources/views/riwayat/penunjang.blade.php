@@ -4,6 +4,14 @@
     <div class="container mt-5">
         <h2>Riwayat Penunjang</h2>
 
+        <div class="card mt-5 mb-5">
+            <div class="card-body">
+                <h5 class="card-title">Data Pasien</h5>
+                <p class="card-text"><strong>Nama:</strong> {{ $pasien->nm_pasien }}</p>
+                <p class="card-text"><strong>No Rekam Medis:</strong> {{ $pasien->no_rkm_medis }}</p>
+            </div>
+        </div>
+
         {{-- Initialize and populate groupedData --}}
         @php
             $groupedData = [];
@@ -22,12 +30,12 @@
 
         {{-- Loop through groupedData --}}
         @foreach ($groupedData as $noRawat => $items)
-            <h3>No Rawat: {{ $noRawat }}</h3>
+            <h3 class="mt-5 mb-5">No Rawat: {{ $noRawat }}</h3>
 
             {{-- Radiologi Table --}}
             @if (isset($items['radiologi']) && count($items['radiologi']) > 0)
                 <h4>Radiologi</h4>
-                <table class="table table-bordered">
+                <table class="table table-bordered mb-5">
                     <thead>
                         <tr>
                             <th>NIP</th>

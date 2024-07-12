@@ -11,7 +11,6 @@ class RegPeriksa extends Model
 
     protected $table = 'reg_periksa';
     protected $primaryKey = 'no_rawat';
-
     public $incrementing = false;
     public $timestamps = false;
 
@@ -33,5 +32,10 @@ class RegPeriksa extends Model
     public function detailPemberianObat()
     {
         return $this->hasMany(DetailPemberianObat::class, 'no_rawat', 'no_rawat');
+    }
+
+    public function poliklinik()
+    {
+        return $this->belongsTo(Poliklinik::class, 'kd_poli', 'kd_poli');
     }
 }

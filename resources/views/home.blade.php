@@ -2,24 +2,17 @@
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
-
     <title>E-Dokter - RSUD PMK</title>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg bg-white sticky-top navbar-light p-3 shadow-sm">
         <div class="container">
-            <a class="navbar-brand" style="color: #9c5518;"><i class="bi bi-hospital"></i> {{ auth()->user()->pegawai->nama }}
-            </a>
+            <a class="navbar-brand" style="color: #9c5518;"><i class="bi bi-hospital"></i> {{ auth()->user()->pegawai->nama }}</a>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
@@ -39,8 +32,7 @@
             <div class="row align-items-end">
                 <div class="col-auto">
                     <label for="tanggal" class="form-label">Tanggal:</label>
-                    <input type="date" id="tanggal" name="tanggal" value="{{ old('tanggal', $tanggal ?? '') }}"
-                        class="form-control" required>
+                    <input type="date" id="tanggal" name="tanggal" value="{{ old('tanggal', $tanggal ?? '') }}" class="form-control" required>
                 </div>
                 <div class="col-auto">
                     <button type="submit" class="btn btn-primary ms-2">Tampil Pasien</button>
@@ -81,10 +73,9 @@
                                 <td>{{ $p->no_rkm_medis }}</td>
                                 <td>{{ $p->no_rawat }}</td>
                                 <td>{{ $p->pasien->nm_pasien }}</td>
-                                <td>{{ $p->kd_poli }}</td>
+                                <td>{{ $p->poliklinik->nm_poli }}</td>
                                 <td>
-                                    <a href="{{ url('/perawatan?no_rawat=' . $p->no_rawat) }}"
-                                        class="badge bg-info text-decoration-none">Eksekusi</a>
+                                    <a href="{{ url('/perawatan?no_rawat=' . $p->no_rawat) }}" class="badge bg-info text-decoration-none">Eksekusi</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -94,12 +85,8 @@
         @endisset
     </div>
 
-    <!-- Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/main.js"></script>
-    <!-- MDB JavaScript files -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.12.0/mdb.min.js"></script>
 </body>
 
