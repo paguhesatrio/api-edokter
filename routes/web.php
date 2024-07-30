@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LabController;
 use App\Http\Controllers\RadiologiController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Login;
@@ -46,6 +47,12 @@ Route::delete('/perawatan', [PerawatanController::class, 'Hapus'])->name('pemeri
 // radiologi 
 Route::get('/radiologi', [RadiologiController::class, 'FormRadiologi'])->name('permintaan.FormRadiologi');
 Route::post('/radiologi', [RadiologiController::class, 'permintaanRadiologi'])->name('radiologi.store');
+
+// Lab
+Route::get('/lab', [LabController::class, 'tampilLab'])->name('lab.tampil');
+Route::post('/lab/store', [LabController::class, 'Lab'])->name('lab.store');
+Route::get('/lab/templates', [LabController::class, 'getTemplates'])->name('lab.templates');
+
 
 // riwayat obat dan penunjnag
 Route::get('/riwayatPengobatan', [RiwayatController::class, 'RiwayatPengobatan'])->name('riwayat.pengobatan');

@@ -12,11 +12,11 @@ class RadiologiController extends Controller
     public function FormRadiologi(Request $request)
     {
         $no_rawat = $request->input('no_rawat');
-    
+
         $pasien = RegPeriksa::with('pasien')->where('no_rawat', $no_rawat)->first();
 
         $pemeriksaan = DB::table('jns_perawatan_radiologi')->get();
-    
+
         return view('/permintaan/radiologi', compact('no_rawat', 'pasien', 'pemeriksaan'));
     }
 

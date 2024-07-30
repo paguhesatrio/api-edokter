@@ -8,7 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class TemplateLaboratorium extends Model
 {
     use HasFactory;
-    protected $table = 'template_laboratorium';
-    protected $primaryKey = 'kd_jenis_prw';
 
+    protected $table = 'template_laboratorium';
+    protected $primaryKey = 'id_template';  // Assuming 'id_template' is the primary key for template_laboratorium
+
+    public function lab()
+    {
+        return $this->belongsTo(JnsPerawatanLab::class, 'kd_jenis_prw', 'kd_jenis_prw');
+    }
 }

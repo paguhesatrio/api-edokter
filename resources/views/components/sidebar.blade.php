@@ -72,6 +72,15 @@
             </a>
         </li>
     </ul>
+    
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url('/lab?no_rawat=' . $no_rawat) }}">
+                <span data-feather="file-text"></span>
+                lab
+            </a>
+        </li>
+    </ul>
 
   </div>
 </nav>

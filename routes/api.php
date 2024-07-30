@@ -28,11 +28,13 @@ Route::post('login', [LoginController::class, 'login']);
 Route::middleware('auth:sanctum')->post('/logout', [LoginController::class, 'logout']);
 
 
-// obat
 Route::get('tampilPasien', [PasienController::class, 'tampilPasien'])->middleware(['auth:sanctum']);
-Route::get('tampilObat', [ObatController::class, 'tampilObat']);
-Route::get('tampilAturanPakai', [ObatController::class, 'tampilAturanPakai']);
+
+// obat
+Route::get('resepObat', [ObatController::class, 'resepObat']);
 Route::post('tambahObat', [ObatController::class, 'tambahObat'])->middleware(['auth:sanctum']);
+//obat
+Route::get('resepRacikan', [ObatController::class, 'resepRacikan']);
 Route::post('tambahObatRacikan', [ObatController::class, 'tambahObatRacikan'])->middleware(['auth:sanctum']);
 
 // soap
@@ -41,12 +43,15 @@ Route::post('soap', [PerawatanController::class, 'Soap'])->middleware(['auth:san
 // permintaan Operasi
 Route::get('kodePaket', [OperasiController::class, 'kodePaket']);
 Route::get('kodeRuangan', [OperasiController::class, 'kodeRuangan']);
-Route::post('boking', [OperasiController::class, 'boking']);
+Route::post('operasi', [OperasiController::class, 'boking'])->middleware(['auth:sanctum']);
 
-// lab not fix
-Route::post('Lab', [LabController::class, 'Lab'])->middleware(['auth:sanctum']);
+// lab
+Route::get('/tampilLab', [LabController::class, 'tampilLab'])->name('lab.form')->middleware(['auth:sanctum']);
+Route::post('/lab/store', [LabController::class, 'Lab'])->name('lab.store');
+
 
 //radiologi
+Route::get('FormRadiologi', [RadiologiController::class, 'FormRadiologi']);
 Route::post('radiologi', [RadiologiController::class, 'permintaanRadiologi'])->middleware(['auth:sanctum']);
 
 //riwayat

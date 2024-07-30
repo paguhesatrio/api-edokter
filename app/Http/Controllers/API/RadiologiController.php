@@ -3,12 +3,38 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\RegPeriksa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class RadiologiController extends Controller
 {
+    public function FormRadiologi(Request $request)
+    {
+        // Mengambil input no_rawat dari request
+        $no_rawat = $request->input('no_rawat');
+        
+        // Mengambil data pasien berdasarkan no_rawat
+        $pasien = RegPeriksa::with('pasien')->where('no_rawat', $no_rawat)->first();
+        
+        // Mengecek apakah pasien ditemukan
+        if (!$pasien) {
+            return response()->json([
+                'message' => 'Pasien tidak ditemukan',
+            ], 404); // Mengembalikan respons 404 jika pasien tidak ditemukan
+        }
+        
+        // Mengambil data jenis perawatan radiologi
+        $pemeriksaan = DB::table('jns_perawatan_radiologi')->get();
+        
+        // Mengembalikan hasil dalam format JSON
+        return response()->json([
+            'pasien' => $pasien,
+            'pemeriksaan' => $pemeriksaan
+        ]);
+    }    
+
     public function permintaanRadiologi(Request $request)
     {
         $request->validate([

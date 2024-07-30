@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\JnsPerawatanLab;
 use App\Models\RegPeriksa;
 use App\Models\TemplateLaboratorium;
@@ -15,34 +14,17 @@ class LabController extends Controller
     public function tampilLab(Request $request)
     {
         $no_rawat = $request->input('no_rawat');
+
+        $pasien = RegPeriksa::with('pasien')->where('no_rawat', $no_rawat)->first();
+
+        $jnsPerawatanLab = JnsPerawatanLab::get(['kd_jenis_prw','nm_perawatan']);
+
         $kd_jenis_prw = $request->input('kd_jenis_prw');
 
-        // Validate request inputs
-        if (!$no_rawat || !$kd_jenis_prw) {
-            return response()->json([
-                'success' => false,
-                'message' => 'no_rawat and kd_jenis_prw are required',
-            ], 400);
-        }
+        $templateLaboratorium = TemplateLaboratorium::where('kd_jenis_prw', $kd_jenis_prw)->get();
 
-        // Retrieve patient and related data
-        $pasien = RegPeriksa::with('pasien')->where('no_rawat', $no_rawat)->first();
-        $jnsPerawatanLab = JnsPerawatanLab::get(['kd_jenis_prw', 'nm_perawatan']);
+        return view('permintaan.lab', compact('no_rawat', 'pasien', 'jnsPerawatanLab','templateLaboratorium'));
 
-        // Fetch template laboratory data
-        $templateLaboratorium = JnsPerawatanLab::with('laboratorium')
-            ->where('kd_jenis_prw', $kd_jenis_prw)
-            ->get();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Permintaan lab berhasil disimpan',
-            'data' => [
-                'pasien' => $pasien,
-                'jenisPerawatanLab' => $jnsPerawatanLab,
-                'templateLaboratorium' => $templateLaboratorium
-            ]
-        ]);
     }
 
     public function Lab(Request $request)
@@ -51,9 +33,9 @@ class LabController extends Controller
             'no_rawat'           => 'required',
             'informasi_tambahan' => 'required',
             'diagnosa_klinis'    => 'required',
-            'detail_permintaan'  => 'required|array',  
-            'detail_permintaan.*.kd_jenis_prw' => 'required',  
-            'detail_permintaan.*.id_template' => 'required',   
+            'detail_permintaan'  => 'required|array',
+            'detail_permintaan.*.kd_jenis_prw' => 'required',
+            'detail_permintaan.*.id_template' => 'required',
         ]);
 
         // Mendapatkan NIK dokter dari user yang sedang login
@@ -105,7 +87,7 @@ class LabController extends Controller
             'success' => true,
             'message' => 'Permintaan lab berhasil disimpan',
             'data' => $lab,
-            'data1'=> $detailPermintaan
+            'data1' => $detailPermintaan
         ]);
     }
 }

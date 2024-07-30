@@ -40,9 +40,10 @@ class OperasiController extends Controller
             'tanggal' => 'required', 
             'jam_mulai' => 'required', 
             'jam_selesai' => 'required', 
-            'kd_dokter' => 'required', 
             'kd_ruang_ok' => 'required', 
         ]);
+
+        $kdDokter = Auth::user()->nik;
         
         $booking = [
             'no_rawat' => $request->input('no_rawat'),
@@ -51,7 +52,7 @@ class OperasiController extends Controller
             'jam_mulai' => $request->input('jam_mulai'),
             'jam_selesai' => $request->input('jam_selesai'),
             'status' => 'menunggu',
-            'kd_dokter' => $request->input('kd_dokter'),
+            'kd_dokter' =>  $kdDokter,
             'kd_ruang_ok' => $request->input('kd_ruang_ok'),
         ];
 

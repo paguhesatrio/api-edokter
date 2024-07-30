@@ -45,36 +45,30 @@ class RiwayatController extends Controller
     public function RiwayatPenunjang(Request $request)
     {
         $no_rkm_medis = $request->input('no_rkm_medis');
-
+    
         $pasien = Pasien::with('RegPeriksa')->find($no_rkm_medis);
-
+    
         $no_rawat = $pasien->RegPeriksa->pluck('no_rawat');
-
-        $radiologi = PeriksaRadiologi::with(['kdjenis', 'nip'])
+    
+        $radiologi = PeriksaRadiologi::with(['kdjenis', 'dokter'])
             ->whereIn('no_rawat', $no_rawat)
             ->get();
-
-        $hasilradiologi = HasilRadiologi::whereIn('no_rawat', $no_rawat)
-            ->get()
-            ->keyBy('no_rawat');
-
+    
+        $hasilradiologi = HasilRadiologi::whereIn('no_rawat', $no_rawat)->get();
+    
         $gambarRadiologi = DB::table('gambar_radiologi')
             ->whereIn('no_rawat', $no_rawat)
             ->get();
-
+    
         $lab = PeriksaLab::with('kdjenis')
             ->whereIn('no_rawat', $no_rawat)
             ->get();
-
+    
         $detailLab = DetailPeriksaLab::with('laboratorium')
             ->whereIn('no_rawat', $no_rawat)
             ->get();
 
-        $dokter = RegPeriksa::with('dokter')
-            ->whereIn('no_rawat', $no_rawat)
-            ->get()
-            ->groupBy('no_rawat');
-
-        return view('riwayat.penunjang', compact('radiologi', 'lab', 'pasien', 'dokter', 'hasilradiologi', 'gambarRadiologi', 'detailLab'));
+        return view('riwayat.penunjang', compact('radiologi', 'lab', 'pasien', 'hasilradiologi', 'gambarRadiologi', 'detailLab'));
     }
+    
 }
