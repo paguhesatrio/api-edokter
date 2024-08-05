@@ -14,7 +14,7 @@ class Databarang extends Model
 
     public function barang()
     {
-        return $this->belongsTo(Gudangbarang::class, 'kode_brng', 'kode_brng');
+        return $this->hasMany(Gudangbarang::class, 'kode_brng', 'kode_brng');
     }
 
     public function resepDokter()

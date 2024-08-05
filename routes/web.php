@@ -1,13 +1,13 @@
 <?php
 
-use App\Http\Controllers\LabController;
-use App\Http\Controllers\RadiologiController;
+use App\Http\Controllers\WEB\LabController;
+use App\Http\Controllers\WEB\RadiologiController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Login;
-use App\Http\Controllers\PasienController;
-use App\Http\Controllers\ObatController;
-use App\Http\Controllers\PerawatanController;
-use App\Http\Controllers\RiwayatController;
+use App\Http\Controllers\WEB\Login;
+use App\Http\Controllers\WEB\PasienController;
+use App\Http\Controllers\WEB\ObatController;
+use App\Http\Controllers\WEB\PerawatanController;
+use App\Http\Controllers\WEB\RiwayatController;
 
 /*
 |--------------------------------------------------------------------------

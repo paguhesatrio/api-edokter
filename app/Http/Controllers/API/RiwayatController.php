@@ -89,45 +89,46 @@ class RiwayatController extends Controller
     public function RiwayatPenunjang(Request $request)
     {
         $no_rkm_medis = $request->input('no_rkm_medis');
-
+    
         $pasien = Pasien::with('RegPeriksa')->find($no_rkm_medis);
-
+    
         if (!$pasien) {
             return response()->json([
                 'success' => false,
                 'message' => 'Pasien tidak ditemukan'
             ], 404);
         }
-
+    
         $no_rawat = $pasien->RegPeriksa->pluck('no_rawat');
-
+    
         $radiologi = PeriksaRadiologi::with(['kdjenis', 'dokter'])
             ->whereIn('no_rawat', $no_rawat)
             ->get();
-
+    
         $hasilradiologi = HasilRadiologi::whereIn('no_rawat', $no_rawat)
             ->get();
-
+    
         $gambarRadiologi = DB::table('gambar_radiologi')
             ->whereIn('no_rawat', $no_rawat)
             ->get();
-
+    
         $lab = PeriksaLab::with(['kdjenis', 'dokter'])
             ->whereIn('no_rawat', $no_rawat)
             ->get();
-
+    
         $detailLab = DetailPeriksaLab::with('laboratorium')
             ->whereIn('no_rawat', $no_rawat)
             ->get();
-
-        // Mengelompokkan data berdasarkan tgl_periksa
+    
+        // Mengelompokkan data berdasarkan tgl_periksa dan jam
         $groupedData = [];
-
+    
         foreach ($radiologi as $radiologiItem) {
-            $key = $radiologiItem->tgl_periksa;
+            $key = $radiologiItem->tgl_periksa . ' ' . $radiologiItem->jam;
             if (!isset($groupedData[$key])) {
                 $groupedData[$key] = [
                     'tgl_periksa' => $radiologiItem->tgl_periksa,
+                    'jam' => $radiologiItem->jam,
                     'radiologi' => [],
                     'gambarRadiologi' => [],
                     'hasilRadiologi' => [],
@@ -144,12 +145,13 @@ class RiwayatController extends Controller
                 'status' => $radiologiItem->status
             ];
         }
-
+    
         foreach ($gambarRadiologi as $gambar) {
-            $key = $gambar->tgl_periksa;
+            $key = $gambar->tgl_periksa . ' ' . $gambar->jam;
             if (!isset($groupedData[$key])) {
                 $groupedData[$key] = [
                     'tgl_periksa' => $gambar->tgl_periksa,
+                    'jam' => $gambar->jam,
                     'radiologi' => [],
                     'gambarRadiologi' => [],
                     'hasilRadiologi' => [],
@@ -162,12 +164,13 @@ class RiwayatController extends Controller
                 'lokasi_gambar' => $gambar->lokasi_gambar
             ];
         }
-
+    
         foreach ($hasilradiologi as $hasil) {
-            $key = $hasil->tgl_periksa;
+            $key = $hasil->tgl_periksa . ' ' . $hasil->jam;
             if (!isset($groupedData[$key])) {
                 $groupedData[$key] = [
                     'tgl_periksa' => $hasil->tgl_periksa,
+                    'jam' => $hasil->jam,
                     'radiologi' => [],
                     'gambarRadiologi' => [],
                     'hasilRadiologi' => [],
@@ -180,12 +183,13 @@ class RiwayatController extends Controller
                 'hasil' => $hasil->hasil
             ];
         }
-
+    
         foreach ($lab as $labItem) {
-            $key = $labItem->tgl_periksa;
+            $key = $labItem->tgl_periksa . ' ' . $labItem->jam;
             if (!isset($groupedData[$key])) {
                 $groupedData[$key] = [
                     'tgl_periksa' => $labItem->tgl_periksa,
+                    'jam' => $labItem->jam,
                     'radiologi' => [],
                     'gambarRadiologi' => [],
                     'hasilRadiologi' => [],
@@ -202,12 +206,13 @@ class RiwayatController extends Controller
                 'status' => $labItem->status,
             ];
         }
-
+    
         foreach ($detailLab as $labDetail) {
-            $key = $labDetail->tgl_periksa;
+            $key = $labDetail->tgl_periksa . ' ' . $labDetail->jam;
             if (!isset($groupedData[$key])) {
                 $groupedData[$key] = [
                     'tgl_periksa' => $labDetail->tgl_periksa,
+                    'jam' => $labDetail->jam,
                     'radiologi' => [],
                     'gambarRadiologi' => [],
                     'hasilRadiologi' => [],
@@ -223,10 +228,10 @@ class RiwayatController extends Controller
                 'biaya' => number_format($labDetail->biaya_item, 0, ',', '.'),
             ];
         }
-
-        // Mengurutkan data yang dikelompokkan berdasarkan tgl_periksa
+    
+        // Mengurutkan data yang dikelompokkan berdasarkan tgl_periksa dan jam
         krsort($groupedData);
-
+    
         return response()->json([
             'success' => true,
             'message' => 'Data retrieved successfully',
@@ -237,4 +242,5 @@ class RiwayatController extends Controller
             'groupedData' => $groupedData
         ]);
     }
+
 }

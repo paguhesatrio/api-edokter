@@ -23,7 +23,29 @@ class ObatController extends Controller
             ], 404);
         }
 
-        $obat = Databarang::with('barang')->get();
+        // Menggunakan raw query untuk agregasi stok
+        $obat = DB::table('databarang')
+            ->join('gudangbarang', 'databarang.kode_brng', '=', 'gudangbarang.kode_brng')
+            ->where('gudangbarang.kd_bangsal', 'AP')
+            ->where(function ($query) {
+                $query->whereNotNull('gudangbarang.no_batch')
+                    ->where('gudangbarang.no_batch', '<>', '');
+            }) // Memastikan no_batch tidak kosong atau ''
+            ->where(function ($query) {
+                $query->whereNotNull('gudangbarang.no_faktur')
+                    ->where('gudangbarang.no_faktur', '<>', '');
+            }) // Memastikan no_faktur tidak kosong atau ''
+            ->groupBy('databarang.kode_brng', 'databarang.nama_brng', 'databarang.letak_barang', 'gudangbarang.kd_bangsal', 'databarang.nama_brng')
+            ->select(
+                'databarang.kode_brng',
+                'databarang.nama_brng',
+                'databarang.letak_barang',
+                'gudangbarang.kd_bangsal',
+                'databarang.expire',
+                DB::raw('SUM(gudangbarang.stok) as total_stok')
+            )
+            ->get();
+
 
         $aturan = DB::table('master_aturan_pakai')->get(['aturan']);
 
@@ -114,8 +136,28 @@ class ObatController extends Controller
             ], 404); // Mengembalikan respons 404 jika pasien tidak ditemukan
         }
 
-        // Mengambil data obat dengan relasi barang
-        $obat = Databarang::with('barang')->get();
+         // Menggunakan raw query untuk agregasi stok
+         $obat = DB::table('databarang')
+         ->join('gudangbarang', 'databarang.kode_brng', '=', 'gudangbarang.kode_brng')
+         ->where('gudangbarang.kd_bangsal', 'AP')
+         ->where(function ($query) {
+             $query->whereNotNull('gudangbarang.no_batch')
+                 ->where('gudangbarang.no_batch', '<>', '');
+         }) // Memastikan no_batch tidak kosong atau ''
+         ->where(function ($query) {
+             $query->whereNotNull('gudangbarang.no_faktur')
+                 ->where('gudangbarang.no_faktur', '<>', '');
+         }) // Memastikan no_faktur tidak kosong atau ''
+         ->groupBy('databarang.kode_brng', 'databarang.nama_brng', 'databarang.letak_barang', 'gudangbarang.kd_bangsal', 'databarang.nama_brng')
+         ->select(
+             'databarang.kode_brng',
+             'databarang.nama_brng',
+             'databarang.letak_barang',
+             'gudangbarang.kd_bangsal',
+             'databarang.expire',
+             DB::raw('SUM(gudangbarang.stok) as total_stok')
+         )
+         ->get();
 
         // Mengambil data aturan pakai dari tabel master_aturan_pakai
         $aturan = DB::table('master_aturan_pakai')->get(['aturan']);

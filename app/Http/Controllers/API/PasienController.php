@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PasienController extends Controller
-{
+{ 
     public function tampilpasien(Request $request)
     {
         $dokter = Auth::user()->nik;
@@ -20,6 +20,7 @@ class PasienController extends Controller
             ->where('kd_dokter', $dokter)
             ->whereDate('tgl_registrasi', $tanggal)
             ->where('status_lanjut', '!=', 'Ranap')
+            ->where('kd_poli', '!=', 'IGDK')
             ->get();
     
         return response()->json([
@@ -28,4 +29,23 @@ class PasienController extends Controller
             'data' => $pasien
         ]);
     }
+
+    public function tampilpasienIgd(Request $request)
+    {
+
+        $tanggal = $request->input('tanggal', Carbon::today()->toDateString());
+
+        $pasien = RegPeriksa::with(['pasien', 'poliklinik', 'dokter'])
+            ->whereDate('tgl_registrasi', $tanggal)
+            ->where('status_lanjut', '!=', 'Ranap')
+            ->where('kd_poli', '=', 'IGDK')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data pasien berhasil dimuat',
+            'data' => $pasien
+        ]);
+    }
+
 }

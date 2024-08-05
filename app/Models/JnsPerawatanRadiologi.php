@@ -18,4 +18,10 @@ class JnsPerawatanRadiologi extends Model
         return $this->belongsTo(PeriksaRadiologi::class, 'kd_jenis_prw', 'kd_jenis_prw');
     }
 
+    public function permintaan()
+    {
+        return $this->belongsTo(PermintaanPemeriksaanRadiologi::class, 'kd_jenis_prw', 'kd_jenis_prw');
+    }
+
+
 }

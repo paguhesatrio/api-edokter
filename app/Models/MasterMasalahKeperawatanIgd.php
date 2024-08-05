@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Gudangbarang extends Model
+class MasterMasalahKeperawatanIgd extends Model
 {
     use HasFactory;
-    protected $table = 'gudangbarang';
-    protected $primaryKey = 'kode_brng';
+
+    protected $table = 'master_masalah_keperawatan_igd';
+    protected $primaryKey = 'kode_masalah';
     public $incrementing = false;
     public $timestamps = false;
-
-    protected $fillable = ['kode_brng', 'kd_bangsal'];
 }

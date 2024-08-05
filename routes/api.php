@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\AssessmentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\LoginController;
@@ -10,7 +11,7 @@ use App\Http\Controllers\API\OperasiController;
 use App\Http\Controllers\API\LabController;
 use App\Http\Controllers\API\RadiologiController;
 use App\Http\Controllers\API\RiwayatController;
-
+use App\Http\Controllers\API\TriaseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,8 +28,11 @@ Route::post('register', [LoginController::class, 'register']);
 Route::post('login', [LoginController::class, 'login']);
 Route::middleware('auth:sanctum')->post('/logout', [LoginController::class, 'logout']);
 
-
+//semuaPasien kecuali igd
 Route::get('tampilPasien', [PasienController::class, 'tampilPasien'])->middleware(['auth:sanctum']);
+//semuaPasien igd
+Route::get('tampilpasienIgd', [PasienController::class, 'tampilpasienIgd'])->middleware(['auth:sanctum']);
+
 
 // obat
 Route::get('resepObat', [ObatController::class, 'resepObat']);
@@ -49,15 +53,22 @@ Route::post('operasi', [OperasiController::class, 'boking'])->middleware(['auth:
 Route::get('/tampilLab', [LabController::class, 'tampilLab'])->name('lab.form')->middleware(['auth:sanctum']);
 Route::post('/lab/store', [LabController::class, 'Lab'])->name('lab.store');
 
-
 //radiologi
 Route::get('FormRadiologi', [RadiologiController::class, 'FormRadiologi']);
 Route::post('radiologi', [RadiologiController::class, 'permintaanRadiologi'])->middleware(['auth:sanctum']);
+////////foto
+Route::get('hasilRadiologi', [RadiologiController::class, 'hasilRadiologi'])->middleware(['auth:sanctum']);
+Route::post('inputhasilRadiologi', [RadiologiController::class, 'inputhasilRadiologi'])->middleware(['auth:sanctum']);
 
 //riwayat
 Route::get('riwayatObat', [RiwayatController::class, 'RiwayatPengobatan']);
-
 Route::get('riwayatPenunjang', [RiwayatController::class, 'RiwayatPenunjang']);
+
+//triase IGD
+Route::get('tampilTriase', [TriaseController::class, 'tampilTriase']);
+
+//assesment
+Route::get('tampilAssesment', [AssessmentController::class, 'tampilAssesment']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

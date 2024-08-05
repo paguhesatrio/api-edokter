@@ -13,6 +13,7 @@ class Dokter extends Model
     protected $primaryKey = 'kd_dokter';
     public $incrementing = false;
     public $timestamps = false;
+    protected $keyType = 'string'; 
 
     public function ReqPeriksa()
     {

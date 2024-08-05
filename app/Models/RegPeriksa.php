@@ -38,4 +38,25 @@ class RegPeriksa extends Model
     {
         return $this->belongsTo(Poliklinik::class, 'kd_poli', 'kd_poli');
     }
+
+    public function gambarRadiologi()
+    {
+        return $this->hasMany(GambarRadiologi::class, 'no_rawat', 'no_rawat');
+    }
+
+    public function hasilRadiologi()
+    {
+        return $this->belongsTo(hasilRadiologi::class, 'no_rawat', 'no_rawat');
+    }
+
+    public function dataTriase()
+    {
+        return $this->hasMany(DataTriaseIgd::class, 'no_rawat', 'no_rawat');
+    }
+    
+    public function penilaianawalIgd()
+    {
+        return $this->hasMany(PenilaianAwalKeperawatanIgd::class, 'no_rawat', 'no_rawat');
+    }
+
 }

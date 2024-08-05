@@ -16,4 +16,9 @@ class HasilRadiologi extends Model
         return $this->belongsTo(Regperiksa::class, 'no_rawat', 'no_rawat');
     }
 
+    public function gambarRadiologi()
+    {
+        return $this->hasMany(GambarRadiologi::class, 'no_rawat', 'no_rawat');
+    }
+
 }

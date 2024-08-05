@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\WEB;
 
+use App\Http\Controllers\Controller;
 use App\Models\JnsPerawatanLab;
 use App\Models\RegPeriksa;
 use App\Models\TemplateLaboratorium;
@@ -14,17 +15,26 @@ class LabController extends Controller
     public function tampilLab(Request $request)
     {
         $no_rawat = $request->input('no_rawat');
-
-        $pasien = RegPeriksa::with('pasien')->where('no_rawat', $no_rawat)->first();
-
-        $jnsPerawatanLab = JnsPerawatanLab::get(['kd_jenis_prw','nm_perawatan']);
-
         $kd_jenis_prw = $request->input('kd_jenis_prw');
 
-        $templateLaboratorium = TemplateLaboratorium::where('kd_jenis_prw', $kd_jenis_prw)->get();
+        // Validate request inputs
+        if (!$no_rawat || !$kd_jenis_prw) {
+            return response()->json([
+                'success' => false,
+                'message' => 'no_rawat and kd_jenis_prw are required',
+            ], 400);
+        }
 
-        return view('permintaan.lab', compact('no_rawat', 'pasien', 'jnsPerawatanLab','templateLaboratorium'));
+        // Retrieve patient and related data
+        $pasien = RegPeriksa::with('pasien')->where('no_rawat', $no_rawat)->first();
+        $jnsPerawatanLab = JnsPerawatanLab::get(['kd_jenis_prw', 'nm_perawatan']);
 
+        // Fetch template laboratory data
+        $templateLaboratorium = JnsPerawatanLab::with('laboratorium')
+            ->where('kd_jenis_prw', $kd_jenis_prw)
+            ->get();
+
+        return view('permintaan.lab', compact('no_rawat', 'pasien', 'jnsPerawatanLab', 'templateLaboratorium'));
     }
 
     public function Lab(Request $request)

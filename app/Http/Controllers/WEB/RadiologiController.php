@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\WEB;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\RegPeriksa;
 use Illuminate\Http\Request;
@@ -15,7 +17,20 @@ class RadiologiController extends Controller
 
         $pasien = RegPeriksa::with('pasien')->where('no_rawat', $no_rawat)->first();
 
+        if (!$pasien) {
+            return response()->json([
+                'message' => 'Pasien tidak ditemukan',
+            ], 404); // Mengembalikan respons 404 jika pasien tidak ditemukan
+        }
+
+        // Mengambil data jenis perawatan radiologi
         $pemeriksaan = DB::table('jns_perawatan_radiologi')->get();
+
+        // Mengembalikan hasil dalam format JSON
+        return response()->json([
+            'pasien' => $pasien,
+            'pemeriksaan' => $pemeriksaan
+        ]);
 
         return view('/permintaan/radiologi', compact('no_rawat', 'pasien', 'pemeriksaan'));
     }
